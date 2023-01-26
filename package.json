@@ -11,7 +11,7 @@
     "test:run": "npm run mysql:stop; npm run mysql:start && node test/db_check.js && mocha test/tests.js $FLAG; npm run mysql:stop",
     "mysql:start": "export FLAG=-d DB_NAME=music_shop_db && npm run mysql:run",
     "mysql:start:log": "export FLAG=-it DB_NAME=music_shop_db && npm run mysql:run",
-    "mysql:run": "docker run -d --rm -p 3306:3306 $VOLUME --name=mysql-sandbox -e MYSQL_ALLOW_EMPTY_PASSWORD=root $DB_NAME mysql:8 mysqld --authentication_policy=mysql_native_password",
+    "mysql:run": "docker run $FLAG --rm -p 3306:3306 -v $(pwd)/schema:/docker-entrypoint-initdb.d --name=mysql-sandbox -e MYSQL_ALLOW_EMPTY_PASSWORD=root -e MYSQL_DATABASE=$DB_NAME mysql:8 mysqld --authentication_policy=mysql_native_password",
     "mysql:stop": "docker container stop mysql-sandbox",
     "mysql:shell": "docker exec -it mysql-sandbox mysql"
   },
