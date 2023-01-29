@@ -1,8 +1,5 @@
 const router = require('express').Router()
-const { application } = require('express')
 const db = require('./db')
-
-app.use(express.json())
 
 router
   .route('/inventory')
@@ -81,11 +78,12 @@ router
   // }
   .get(async(req, res) => {
     try {
-      const [item] = await db.query(`SELECT * FROM inventory WHERE id=?`,
+      const [[item]] = await db.query(`SELECT * FROM inventory WHERE id=?`,
       req.params.id)
+      if (!item) throw new Error
       res.json(item)
     } catch (err) {
-      res.status(404).send('Item not found: ' + err.message)
+      return res.status(404).send('Item not found: ' + err.message)
     }
   })
   // TODO: Create a PUT route that updates the inventory table based on the id
@@ -110,16 +108,16 @@ router
         price &&
         quantity
       )) {
-        return res.status(400).send('must include name, image URL, description, price, and quantity')
+        return res.status(400).send('must include name, image, description, price, and quantity')
       }
       const [{affectedRows}] = await db.query(
-        `UPDATE inventory SET ? WHERE id=?`
+        `UPDATE inventory SET ? WHERE id=?`,
         [{name, image, description, price, quantity}, req.params.id]
       )
       if (affectedRows === 0) return res.status(404).send('Item not found.')
       res.status(204).send('Item updated.')
     } catch (err) {
-      res.status(500).send('Error updating item: ' + err.message)
+      return res.status(500).send('Error updating item: ' + err)
     }
   })
   // TODO: Create a DELETE route that deletes an item from the inventory table
