@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "MySQL",
+            "name": "Assignment 5",
+            "connectString": "mysql://t16qwzglutysmazn:fbfydrytcwn4jurd@y5svr1t2r5xudqeq.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/l53nmj8uz5slei26"
+        }
+    ]
+}
